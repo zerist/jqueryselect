@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> test </title>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+  <ul id='ul1' name='ul' class='ul'>
+    <li id='li1' name='li' class='li'>li</li>
+    <li id='li2' name='li' class='li'><p id='p1' name='p' class='p'><a src='' class='a'>p</p></a></li>
+  
+    <li class='li'><img src='' class='img'/></li>
+    </ul>
+    <h1>sdad</h1>
+    <h2>asdasd</h2>
+    <h5>adasd</h5>
+    <h5>asdasd</h5>
+  <script type='text/javascript'>
+    var $ = function(input){
+        //result array for all the elem to return
+        var result = []
+
+        //tokenize the input
+        var words = tokenize(input)
+
+        //check for error input
+        if(check_word_end(words)){
+            alert('error input in the end of word')
+        }else{
+            //for loop the words
+            var tmp_result = []
+            var elemArray = []
+            for(var i=0, j=words.length; i<j; i++){
+                //$('*')
+                var word = words[0]
+                var sel_type = get_sel_type(word)
+                if(sel_type == 'all_sel'){
+                    if(tmp_result.length == 0){
+                        var parentObj = document
+                        tmp_result.push(parentObj.getElementsByTagName('*'))
+                    }else{
+                        for(var x=0, y=tmp_result.length; x<y; x++){
+                            var parentObjArray = tmp_result[0]
+                            for(var n=0; n<parentObjArray.length; n++){
+                                var parentObj = parentObjArray[n]
+                                var all_elems = parentObj.getElementsByTagName('*')
+                                if(all_elems.length != 0){
+                                    tmp_result.push(all_elems)
+                                }
+                            }
+                            tmp_result.shift()
+                        }
+                    }
+                }
+                
+                //$('p')
+                if(sel_type == 'elem_sel'){
+                    if(word[0] == ' '){
+                        var elem_tagname = word.substring(1, word.length)
+                    }else{
+                        var elem_tagname = word
+                    }
+                    if(tmp_result.length == 0){
+                        var parentObj = document
+                        tmp_result.push(parentObj.getElementsByTagName(elem_tagname))
+                    }else{
+                        for(var x=0, y=tmp_result.length; x<y; x++){
+                            var parentObjArray = tmp_result[0]
+                            for(var n=0; n<parentObjArray.length; n++){
+                                var parentObj = parentObjArray[n]
+                                var tagname_elems = parentObj.getElementsByTagName(elem_tagname)
+                                if(tagname_elems.length != 0){
+                                    tmp_result.push(tagname_elems)
+                                }
+                            }
+                            tmp_result.shift()
+                        }
+                    }
+
+                }
+
+                //$('#id')
+                if(sel_type == 'id_sel'){
+                    var element_id = word.substring(1, word.length)
+                    result.push(document.getElementById(element_id))
+                }
+
+                //$(':first')
+                if(sel_type == 'index_sel'){
+                    var index_word = word.substring(1, word.length)
+                    var index_array = []
+                    if(index_word == 'first'){
+                        tmp_result.push(tmp_result[0][0])
+                        tmp_result.shift()
+                    }else if(index_word == 'last'){
+                        tmp_result.push(tmp_result[0][tmp_result[0].length-1])
+                        tmp_result.shift()
+                    }else if(index_word == 'even'){
+                        var even_elems = []
+                        for(var x=0; x<tmp_result[0].length -1; x++){
+                            if(x % 2 == 1){
+                                even_elems.push(tmp_result[0][x])
+                            }
+                        }
+                        tmp_result.push(even_elems)
+                        tmp_result.shift()
+                    }else if(index_word == 'odd'){
+                        var odd_elems = []
+                        for(var x=0; x<tmp_result[0].length-1; x++){
+                            if(x % 2 == 0 ){
+                                odd_elems.push(tmp_result[0][x])
+                            }
+                        }
+                        tmp_result.push(odd_elems)
+                        tmp_result.shift()
+                    }else if(index_word == 'header'){
+                        var head_elems = []
+                        var elems = document.getElementsByTagName('*')
+                        var headName = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+                        while(elems.length > 0){
+                            for(var m=0; m<headName.length, m++){
+                                if(elems[0].nodeName == headName[m]){
+                                    head_elems.push(elems[0])
+                                }
+                            }
+                            if(elems[0].getElementsByTagName('*').length != 0){
+                                for(var x=0; x<elems[0].getElementsByTagName('*').length; x++){
+                                    elems.push(elems[0].getElementsByTagName()[x])
+                                }
+                            }
+
+                            elems.shift()
+                        }
+                        tmp_result.push(head_elems)
+                    }else if(index_word == 'empty'){
+                        var empty_elems = []
+                        var elems = document.getElementsByTagName('*')
+                        while(elems.length >0){
+                            if(elems[0].getElementsByTagName('*').length == 0){
+                                empty_elems.push(elems[0])
+                            }else{
+                                for(var x=0; x<elems[0].getElementsByTagName('*').length; x++){
+                                    elems.push(elems[0].getElementsByTagName('*')[x])
+                                }
+                            }
+                            elems.shift()
+                        }
+                    }else if{
+                        continue
+                    }
+                }
+                //$('.class')
+                if(sel_type == 'class_sel'){
+                    var element_class = word.substring(1, word.length)
+                    if (tmp_result.length == 0){
+                        var parentObj = document
+                        tmp_result.push(getByClass(parentObj, element_class))
+                    }else{
+                        for(var x=0, y=tmp_result.length; x<y; x++){
+                            var parentObjArray = tmp_result[0]
+                            for(var n=0; n<parentObjArray.length; n++){
+                                var parentObj = parentObjArray[n]
+                                var cls_elems = getByClass(parentObj, element_class)
+                                if(cls_elems.length != 0 ){
+                                    tmp_result.push(cls_elems)
+                                }
+                            }
+                            tmp_result.shift()
+                        }
+                    }
+                    
+                }
+                words.shift()
+
+            }
+            console.log(tmp_result)
+            
+        }
+    }
+    console.log($('.li p'))
+    
+    function getByClass(parentObj ,clsName){
+        var result = []
+        var elemArray = parentObj.getElementsByTagName('*')
+        for(var i=0; i<elemArray.length; i++){
+            if(elemArray[i].className == clsName){
+                result.push(elemArray[i])
+            }
+        }
+        
+        return result
+    }
+
+
+    function getHeadTag(parentObj){
+        var result = []
+        var h1 = parentObj.getElementsByTagName('h1')
+        var h2 = parentObj.getElementsByTagName('h2')
+        var h3 = parentObj.getElementsByTagName('h3')
+        var h4 = parentObj.getElementsByTagName('h4')
+        var h5 = parentObj.getElementsByTagName('h5')
+        var h6 = parentObj.getElementsByTagName('h6')
+        result = [h1, h2, h3, h4, h5, h6]
+        for(var i=0, j=result.length; i<j; i++){
+            if(result[0].length == 0){
+                result.shift()
+            }else{
+                for(var n=0; n<result[0].length; n++){
+                    result.push(result[0][n])
+                }
+                result.shift()
+            }
+        }
+        return result
+    }
+
+    function get_sel_type(word){
+        var type = ''
+        if(word[0] == '.'){
+            type = "class_sel"
+        }else if(word[0] == '#'){
+            type = "id_sel"
+        }else if(word[0] == '*'){
+            type = "all_sel"
+        }else if(word[0] == ':'){
+            type = 'index_sel'
+        }else if(word[0] == '['){
+            type = 'attr_sel'
+        }else{
+            type = "elem_sel"
+        }
+        return type
+    }
+
+    function check_word_end(words){
+        var punc_array = ['.', '#', '*', ':', ' ', '[']
+        var word = words[words.length-1]
+        var word_end = word[word.length-1]
+        for(var i=0; i<punc_array; i++){
+            if(word_end == punc_array[i]){
+                return true
+            }
+        }
+        return false
+    }
+    function tokenize(input){
+        var result =  input.match(/([\.|#|:|\*|\s]?)(\w*)/g)
+        result.pop()
+        return result
+
+    }
+    
+    
+  </script>
+</body>
+</html>

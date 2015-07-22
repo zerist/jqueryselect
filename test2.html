@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> test </title>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+  <ul id='ul1' name='ul' class='ul'>
+    <li id='li1' name='li' class='li'>li</li>
+    <li id='li2' name='li' class='li'><p id='p1' name='p' class='p'>p</p></li>
+  </ul>
+  <h1>aaaa</h1>
+  <h2>asdad</h2>
+  <h3>adad</h3>
+ 	<script type='text/javascript'>
+ 		var elem1 = document.getElementById('li2');
+ 		var elem2 = elem1.getElementsByTagName('p');
+    var headers = document.getElementsByTagName('h2')[0]
+    var words = [[], [4,3], 3, 6, 34 ,56]
+    console.log(headers.nodeName)    
+ 	</script>
+</body>
+</html>
