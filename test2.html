@@ -9,15 +9,33 @@
     <li id='li1' name='li' class='li'>li</li>
     <li id='li2' name='li' class='li'><p id='p1' name='p' class='p'>p</p></li>
   </ul>
+  <input type='text' />dasd
+  <input type="password" />asdad
   <h1>aaaa</h1>
   <h2>asdad</h2>
   <h3>adad</h3>
  	<script type='text/javascript'>
  		var elem1 = document.getElementById('li2');
  		var elem2 = elem1.getElementsByTagName('p');
-    var headers = document.getElementsByTagName('h2')[0]
-    var words = [[], [4,3], 3, 6, 34 ,56]
-    console.log(headers.nodeName)    
+    function tokenize(input){
+        var result =  input.match(/([\.|#|:|\[|\*|\s|\+|\>|\~]?)([\w|\d|!|=|$|\(|\)]*)/g)
+        result.pop()
+
+        for(var i=0; i<result.length; i++){
+          var ll = result[i][0] || ''
+          if(ll == '['){
+            result.pop()
+          }
+        }
+        return result
+
+    }
+    var list1 = [1,2,3]
+    var list2 = []
+    list2.push(list1[1])
+    list1[1] = 0
+    console.log(list1)
+    console.log(list2)
  	</script>
 </body>
 </html>
